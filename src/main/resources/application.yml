@@ -1,6 +1,14 @@
+server:
+  port: 9090
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/library?serverTimezone=GMT%2b8
     username: root
     password: 757520
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    type-aliases-package: com.lilac.entity
