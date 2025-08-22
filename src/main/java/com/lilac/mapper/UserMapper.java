@@ -44,18 +44,9 @@ public interface UserMapper {
     void delete(Integer id);
 
     /**
-     * 根据用户名查询用户
-     * @param username
+     * 根据用户名、手机号查询用户
+     * @param user
      * @return
      */
-    @Select("select * from user where username=#{username}")
-    User selectByUserName(String username);
-
-    /**
-     * 根据手机号查询用户
-     * @param phone
-     * @return
-     */
-    @Select("select * from user where phone= #{phone}")
-    User selectByPhone(String phone);
+    User selectByUniqueFields(User user);
 }

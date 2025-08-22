@@ -5,10 +5,12 @@
         insert into user (name,username, age,gender,phone,address,create_time,update_time)
         values (#{name},#{username},#{age},#{gender},#{phone},#{address},#{createTime},#{updateTime})
     </insert>
+
     <update id="update">
         update user set name=#{name},username=#{username}, age=#{age},gender=#{gender},phone=#{phone},address=#{address}, update_time=#{updateTime}
         where id=#{id}
     </update>
+
     <select id="pageList" resultType="com.lilac.entity.User">
         select * from user
         <where>
@@ -19,5 +21,28 @@
                 and phone like concat('%', #{phone}, '%')
             </if>
         </where>
+    </select>
+
+    <select id="selectByUniqueFields" resultType="com.lilac.entity.User">
+        select * from user
+        <where>
+            <if test="id != null">
+                and id != #{id}
+            </if>
+            <if test="username != null and username != '' or phone != null and phone != ''">
+                and (
+                <if test="username != null and username != ''">
+                    username = #{username}
+                </if>
+                <if test="username != null and username != '' and phone != null and phone != ''">
+                    or
+                </if>
+                <if test="phone != null and phone != ''">
+                    phone = #{phone}
+                </if>
+                )
+            </if>
+        </where>
+        limit 1
     </select>
 </mapper>

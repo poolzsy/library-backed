@@ -52,12 +52,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void save(User user) {
-        if (userMapper.selectByUserName(user.getUsername()) != null) {
-            throw new SystemException(HttpsCodeEnum.USER_NAME_EXIST);
-        }
-        if (userMapper.selectByPhone(user.getPhone()) != null) {
-            throw new SystemException(HttpsCodeEnum.USER_PHONE_EXIST);
-        }
+        checkUniqueness(user);
         userMapper.save(user);
     }
 
@@ -68,12 +63,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void update(User user) {
-        if (userMapper.selectByUserName(user.getUsername()) != null) {
-            throw new SystemException(HttpsCodeEnum.USER_NAME_EXIST);
-        }
-        if (userMapper.selectByPhone(user.getPhone()) != null) {
-            throw new SystemException(HttpsCodeEnum.USER_PHONE_EXIST);
-        }
+        checkUniqueness(user);
         userMapper.update(user);
     }
 
@@ -85,5 +75,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Integer id) {
         userMapper.delete(id);
+    }
+
+    /**
+     * 统一的唯一性校验方法
+     * @param user 待校验的用户信息，save时无id，update时有id
+     */
+    private void checkUniqueness(User user) {
+        User existingUser = userMapper.selectByUniqueFields(user);
+        if (existingUser != null) {
+            // 如果找到了重复的用户，判断是哪个字段重复了
+            if (existingUser.getUsername().equals(user.getUsername())) {
+                throw new SystemException(HttpsCodeEnum.USER_NAME_EXIST);
+            }
+            if (existingUser.getPhone().equals(user.getPhone())) {
+                throw new SystemException(HttpsCodeEnum.USER_PHONE_EXIST);
+            }
+        }
     }
 }
