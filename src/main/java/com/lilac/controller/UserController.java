@@ -36,4 +36,37 @@ public class UserController {
     public Result Page(UserPageDTO userPageDTO){
         return userService.Page(userPageDTO);
     }
+
+    /**
+     * 保存用户
+     * @param user
+     * @return
+     */
+    @PostMapping("/save")
+    public Result save(@RequestBody User user){
+        userService.save(user);
+        return Result.success();
+    }
+
+    /**
+     * 更新用户
+     * @param user
+     * @return
+     */
+    @PutMapping("/update")
+    public Result update(@RequestBody User user){
+        userService.update(user);
+        return Result.success();
+    }
+
+    /**
+     * 删除用户
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/delete/{id}")
+    public Result delete(@PathVariable Integer id){
+        userService.delete(id);
+        return Result.success();
+    }
 }

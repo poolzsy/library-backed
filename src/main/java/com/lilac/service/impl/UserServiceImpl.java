@@ -42,4 +42,34 @@ public class UserServiceImpl implements UserService {
         PageVO page = new PageVO(pageInfo.getList(), pageInfo.getTotal());
         return Result.success(page);
     }
+
+    /**
+     * 保存用户
+     *
+     * @param user
+     */
+    @Override
+    public void save(User user) {
+        userMapper.save(user);
+    }
+
+    /**
+     * 更新用户
+     *
+     * @param user
+     */
+    @Override
+    public void update(User user) {
+        userMapper.update(user);
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param id
+     */
+    @Override
+    public void delete(Integer id) {
+        userMapper.delete(id);
+    }
 }

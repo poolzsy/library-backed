@@ -19,4 +19,22 @@ public interface UserService {
      * @return
      */
     Result Page(UserPageDTO userPageDTO);
+
+    /**
+     * 保存用户
+     * @param user
+     */
+    void save(User user);
+
+    /**
+     * 更新用户
+     * @param user
+     */
+    void update(User user);
+
+    /**
+     * 删除用户
+     * @param id
+     */
+    void delete(Integer id);
 }
