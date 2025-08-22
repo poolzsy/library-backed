@@ -19,7 +19,6 @@ public class UserController {
 
     /**
      * 获取所有用户
-     * @return
      */
     @GetMapping("/list")
     public Result list(){
@@ -29,8 +28,6 @@ public class UserController {
 
     /**
      * 分页获取用户
-     * @param userPageDTO
-     * @return
      */
     @GetMapping("/page")
     public Result Page(UserPageDTO userPageDTO){
@@ -39,8 +36,6 @@ public class UserController {
 
     /**
      * 新增用户
-     * @param user
-     * @return
      */
     @PostMapping("/save")
     public Result save(@RequestBody User user){
@@ -50,8 +45,6 @@ public class UserController {
 
     /**
      * 更新用户
-     * @param user
-     * @return
      */
     @PutMapping("/update")
     public Result update(@RequestBody User user){
@@ -61,8 +54,6 @@ public class UserController {
 
     /**
      * 删除用户
-     * @param id
-     * @return
      */
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id){
