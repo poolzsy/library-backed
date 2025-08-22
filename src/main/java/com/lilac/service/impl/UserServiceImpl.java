@@ -6,6 +6,8 @@ import com.lilac.entity.DTO.UserPageDTO;
 import com.lilac.entity.Result;
 import com.lilac.entity.User;
 import com.lilac.entity.VO.PageVO;
+import com.lilac.enums.HttpsCodeEnum;
+import com.lilac.exception.SystemException;
 import com.lilac.mapper.UserMapper;
 import com.lilac.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +46,18 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 保存用户
+     * 新增用户
      *
      * @param user
      */
     @Override
     public void save(User user) {
+        if (userMapper.selectByUserName(user.getUsername()) != null) {
+            throw new SystemException(HttpsCodeEnum.USER_NAME_EXIST);
+        }
+        if (userMapper.selectByPhone(user.getPhone()) != null) {
+            throw new SystemException(HttpsCodeEnum.USER_PHONE_EXIST);
+        }
         userMapper.save(user);
     }
 
@@ -60,6 +68,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void update(User user) {
+        if (userMapper.selectByUserName(user.getUsername()) != null) {
+            throw new SystemException(HttpsCodeEnum.USER_NAME_EXIST);
+        }
+        if (userMapper.selectByPhone(user.getPhone()) != null) {
+            throw new SystemException(HttpsCodeEnum.USER_PHONE_EXIST);
+        }
         userMapper.update(user);
     }
 

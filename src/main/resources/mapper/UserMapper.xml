@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lilac.mapper.UserMapper">
     <insert id="save">
-        insert into user (name,username, age,gender,phone,address)
-        values (#{name},#{username},#{age},#{gender},#{phone},#{address})
+        insert into user (name,username, age,gender,phone,address,create_time,update_time)
+        values (#{name},#{username},#{age},#{gender},#{phone},#{address},#{createTime},#{updateTime})
     </insert>
     <update id="update">
-        update user set name=#{name},username=#{username}, age=#{age},gender=#{gender},phone=#{phone},address=#{address}
+        update user set name=#{name},username=#{username}, age=#{age},gender=#{gender},phone=#{phone},address=#{address}, update_time=#{updateTime}
         where id=#{id}
     </update>
     <select id="pageList" resultType="com.lilac.entity.User">

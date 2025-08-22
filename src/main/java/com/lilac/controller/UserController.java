@@ -38,7 +38,7 @@ public class UserController {
     }
 
     /**
-     * 保存用户
+     * 新增用户
      * @param user
      * @return
      */

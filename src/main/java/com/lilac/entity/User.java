@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * (User)表实体类
  *
@@ -28,6 +30,7 @@ public class User {
     private String phone;
     //住址
     private String address;
-
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 }
 

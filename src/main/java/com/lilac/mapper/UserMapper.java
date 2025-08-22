@@ -42,4 +42,20 @@ public interface UserMapper {
      */
     @Delete("delete from user where id=#{id}")
     void delete(Integer id);
+
+    /**
+     * 根据用户名查询用户
+     * @param username
+     * @return
+     */
+    @Select("select * from user where username=#{username}")
+    User selectByUserName(String username);
+
+    /**
+     * 根据手机号查询用户
+     * @param phone
+     * @return
+     */
+    @Select("select * from user where phone= #{phone}")
+    User selectByPhone(String phone);
 }

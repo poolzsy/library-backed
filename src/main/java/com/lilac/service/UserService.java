@@ -21,7 +21,7 @@ public interface UserService {
     Result Page(UserPageDTO userPageDTO);
 
     /**
-     * 保存用户
+     * 新增用户
      * @param user
      */
     void save(User user);
