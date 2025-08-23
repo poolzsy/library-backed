@@ -10,8 +10,10 @@ import com.lilac.enums.HttpsCodeEnum;
 import com.lilac.exception.SystemException;
 import com.lilac.mapper.UserMapper;
 import com.lilac.service.UserService;
+import com.lilac.utils.CardIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -20,10 +22,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    private static final int MAX_CARD_ID_RETRIES = 10; // 定义最大重试次数，防止死循环
+
     /**
      * 获取所有用户
-     *
-     * @return
      */
     @Override
     public List<User> list() {
@@ -32,9 +34,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 分页获取用户
-     *
-     * @param userPageDTO
-     * @return
      */
     @Override
     public Result Page(UserPageDTO userPageDTO) {
@@ -47,30 +46,26 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 新增用户
-     *
-     * @param user
      */
     @Override
     public void save(User user) {
-        checkUniqueness(user);
+        validatePhoneUniqueness(user.getPhone(), null);
+        handleMemberCard(user);
         userMapper.save(user);
     }
 
     /**
      * 更新用户
-     *
-     * @param user
      */
     @Override
     public void update(User user) {
-        checkUniqueness(user);
+        validatePhoneUniqueness(user.getPhone(), user.getId());
+        handleMemberCard(user);
         userMapper.update(user);
     }
 
     /**
      * 删除用户
-     *
-     * @param id
      */
     @Override
     public void delete(Integer id) {
@@ -78,19 +73,47 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 统一的唯一性校验方法
-     * @param user 待校验的用户信息，save时无id，update时有id
+     * 统一处理会员卡号的生成与作废逻辑
      */
-    private void checkUniqueness(User user) {
-        User existingUser = userMapper.selectByUniqueFields(user);
+    private void handleMemberCard(User user) {
+        boolean isMember = "1".equals(user.getIsMember());
+        if (isMember) {
+            // 如果是会员，且当前没有卡号，则为其生成一个唯一的卡号
+            if (!StringUtils.hasText(user.getCardId())) {
+                user.setCardId(generateUniqueCardId());
+            }
+        } else {
+            // 如果不是会员，则强制将卡号设为 null
+            user.setCardId(null);
+        }
+    }
+
+    /**
+     * 生成一个保证在数据库中唯一的会员卡号
+     * @return 唯一的会员卡号
+     */
+    private String generateUniqueCardId() {
+        for (int i = 0; i < MAX_CARD_ID_RETRIES; i++) {
+            String cardId = CardIdGenerator.generate();
+            if (userMapper.existsByCardId(cardId) == null) {
+                return cardId;
+            }
+        }
+        throw new SystemException(HttpsCodeEnum.USER_CARD_ID_ERROR);
+    }
+
+    /**
+     * 专门用于校验手机号的唯一性
+     * @param phone 手机号
+     * @param excludeId 需要从校验中排除的用户ID (更新时传入)
+     */
+    private void validatePhoneUniqueness(String phone, Integer excludeId) {
+        if (!StringUtils.hasText(phone)) {
+            return;
+        }
+        User existingUser = userMapper.selectByPhone(phone, excludeId);
         if (existingUser != null) {
-            // 如果找到了重复的用户，判断是哪个字段重复了
-            if (existingUser.getUsername().equals(user.getUsername())) {
-                throw new SystemException(HttpsCodeEnum.USER_NAME_EXIST);
-            }
-            if (existingUser.getPhone().equals(user.getPhone())) {
-                throw new SystemException(HttpsCodeEnum.USER_PHONE_EXIST);
-            }
+            throw new SystemException(HttpsCodeEnum.USER_PHONE_EXIST);
         }
     }
 }

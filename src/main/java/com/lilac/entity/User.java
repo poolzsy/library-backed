@@ -20,12 +20,14 @@ public class User {
     private Integer id;
     //姓名
     private String name;
-    //用户名
-    private String username;
+    //会员号
+    private String cardId;
     //年龄
     private Integer age;
     //性别
     private String gender;
+    //是否是会员
+    private String isMember;
     //手机号
     private String phone;
     //住址

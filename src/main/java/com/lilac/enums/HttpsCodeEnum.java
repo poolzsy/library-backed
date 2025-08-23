@@ -8,8 +8,9 @@ public enum HttpsCodeEnum {
     SYSTEM_ERROR(500, "系统内部错误，请联系管理员"),
 
     BAD_REQUEST(400, "无效的请求参数"),
-    USER_NAME_EXIST(40001, "用户名已存在"),
-    USER_PHONE_EXIST(40002, "手机号已存在"),
+    USER_NAME_EXIST(40001, "用户名已存在"), // 这里应该是 CardId
+    USER_CARD_ID_ERROR(40002, "会员卡号生成失败，请稍后重试或联系管理员"), // 新增
+    USER_PHONE_EXIST(40003, "手机号已存在"),
     RESOURCE_NOT_FOUND(404, "请求的资源不存在");
 
     private final Integer code;
